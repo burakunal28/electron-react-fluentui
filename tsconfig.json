@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "typeRoots": ["./node_modules/@types"],
+    "types": [],
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["renderer/*"],
+      "@pages/*": ["renderer/pages/*"],
+      "@components/*": ["renderer/components/*"],
+      "@hooks/*": ["renderer/hooks/*"],
+      "@context/*": ["renderer/context/*"],
+      "@layout/*": ["renderer/layout/*"],
+      "@routes/*": ["renderer/routes/*"],
+      "@assets/*": ["renderer/assets/*"],
+      "@types/*": ["renderer/types/*"],
+      "@uds/*": ["uds/*"],
+      "@build/*": ["build/*"],
+      "@electron/*": ["electron/*"],
+      "@root/*": ["./*"]
+    }
+  },
+  "include": ["renderer", "uds", "electron"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

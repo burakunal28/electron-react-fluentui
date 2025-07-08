@@ -1,0 +1,44 @@
+{
+  "name": "electron-react-fluentui",
+  "productName": "Electron React FluentUI Boilerplate",
+  "private": true,
+  "description": "The boilerplate for building Electron applications with React and FluentUI.",
+  "author": "Burak Unal",
+  "version": "3.0.0",
+  "scripts": {
+    "start": "vite",
+    "build": "tsc && vite build && electron-builder",
+    "lint": "biome lint src",
+    "format": "biome format src --write",
+    "check": "biome check src",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fluentui/react-components": "^9.66.6",
+    "@fluentui/react-icons": "^2.0.305",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "events": "^3.3.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.3",
+    "ref-napi": "^3.0.3",
+    "scheduler": "^0.26.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.1.1",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react": "^4.6.0",
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12",
+    "sass-embedded": "^1.89.2",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.3",
+    "vite-plugin-electron": "^0.29.0",
+    "vite-plugin-electron-renderer": "^0.14.6"
+  },
+  "main": "dist-electron/main.js",
+  "preload": "dist-electron/preload.js"
+}

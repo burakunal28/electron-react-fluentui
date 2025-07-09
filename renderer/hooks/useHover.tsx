@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export const useHover = (id: string) => {
   const [isHovered, setIsHovered] = useState<Record<string, boolean>>({});
@@ -9,6 +9,17 @@ export const useHover = (id: string) => {
 
   const onMouseLeave = useCallback(() => {
     setIsHovered((prev) => ({ ...prev, [id]: false }));
+  }, [id]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      setIsHovered((prev) => {
+        const newState = { ...prev };
+        delete newState[id];
+        return newState;
+      });
+    };
   }, [id]);
 
   return {

@@ -6,7 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
-    "typeRoots": ["./node_modules/@types"],
+    "typeRoots": ["./node_modules/@types", "./types"],
     "types": [],
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
@@ -27,14 +27,13 @@
       "@context/*": ["renderer/context/*"],
       "@layout/*": ["renderer/layout/*"],
       "@routes/*": ["renderer/routes/*"],
-      "@assets/*": ["renderer/assets/*"],
-      "@types/*": ["renderer/types/*"],
-      "@uds/*": ["uds/*"],
-      "@build/*": ["build/*"],
+      "@types/*": ["renderer/types/*", "types/*"],
+      "@renderer-types/*": ["renderer/types/*"],
+      "@electron-types/*": ["electron/types/*"],
       "@electron/*": ["electron/*"],
       "@root/*": ["./*"]
     }
   },
-  "include": ["renderer", "uds", "electron"],
+  "include": ["renderer", "electron", "types"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

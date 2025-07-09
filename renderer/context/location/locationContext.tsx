@@ -1,6 +1,6 @@
 import { routes } from "@routes/routes";
 import type React from "react";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useMemo } from "react";
 import { useLocation as useReactRouterLocation } from "react-router-dom";
 import type { LocationContextProps } from "@/types/context/location";
 
@@ -12,21 +12,16 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const location = useReactRouterLocation();
-  const [contextValue, setContextValue] = useState<LocationContextProps>({
-    pathname: location.pathname,
-    title:
-      routes.find((route) => route.path === location.pathname)?.title ?? "Home",
-  });
 
-  useEffect(() => {
+  const contextValue = useMemo(() => {
     const currentRoute = routes.find(
       (route) => route.path === location.pathname,
     );
-    setContextValue({
+    return {
       pathname: location.pathname,
       title: currentRoute?.title ?? "Home",
-    });
-  }, [location]);
+    };
+  }, [location.pathname]);
 
   return (
     <LocationContext.Provider value={contextValue}>

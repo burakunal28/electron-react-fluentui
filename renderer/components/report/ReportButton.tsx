@@ -2,14 +2,16 @@ import { useTab } from "@context/tabs/TabContext";
 import { Button } from "@fluentui/react-components";
 import { WarningFilled, WarningRegular } from "@fluentui/react-icons";
 import { useHover } from "@hooks/useHover";
-import { useLocation } from "@hooks/useLocation";
+import { useLocationContext } from "@hooks/useLocationContext";
 import { useRouteTabs } from "@hooks/useRouteTabs";
 import { routes } from "@routes/routes";
+import type { FC } from "react";
 import React from "react";
 import { ReportDialog } from "@/components/dialog/report/ReportDialog";
+import type { ReportButtonProps } from "@/types/components/report";
 
-export const ReportButton = () => {
-  const { pathname } = useLocation();
+export const ReportButton: FC<ReportButtonProps> = ({ className, onClick }) => {
+  const { pathname } = useLocationContext();
   const { isHovered, hoverProps } = useHover("report");
   const { selectedTab } = useTab();
   const { tabKeys, tabLabels } = useRouteTabs();
@@ -46,11 +48,14 @@ export const ReportButton = () => {
     <>
       <Button
         type="button"
-        className="report-button"
+        className={`report-button ${className}`}
         appearance="transparent"
         icon={isHovered ? <WarningFilled /> : <WarningRegular />}
         title="Report a problem"
-        onClick={() => setDialogOpen(true)}
+        onClick={() => {
+          setDialogOpen(true);
+          if (onClick) onClick();
+        }}
         {...hoverProps}
       />
       <ReportDialog

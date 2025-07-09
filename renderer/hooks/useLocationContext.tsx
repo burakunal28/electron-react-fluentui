@@ -2,10 +2,12 @@ import { LocationContext } from "@context/location/locationContext";
 import { useContext } from "react";
 import type { LocationContextProps } from "@/types/context/location";
 
-export const useLocation = (): LocationContextProps => {
+export const useLocationContext = (): LocationContextProps => {
   const context = useContext(LocationContext);
   if (!context) {
-    throw new Error("useLocation must be used within a LocationProvider");
+    throw new Error(
+      "useLocationContext must be used within a LocationProvider",
+    );
   }
   return context;
 };

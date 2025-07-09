@@ -2,7 +2,7 @@ export {};
 
 declare global {
   interface Window {
-    electron: {
+    electron?: {
       ipcRenderer: {
         invoke(channel: string, ...args: unknown[]): Promise<unknown>;
         on(channel: string, func: (...args: unknown[]) => void): void;

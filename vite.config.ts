@@ -15,10 +15,10 @@ export default defineConfig({
       "@context": path.resolve(__dirname, "./renderer/context"),
       "@layout": path.resolve(__dirname, "./renderer/layout"),
       "@routes": path.resolve(__dirname, "./renderer/routes"),
-      "@assets": path.resolve(__dirname, "./renderer/assets"),
-      "@types": path.resolve(__dirname, "./renderer/types"),
-      "@uds": path.resolve(__dirname, "./uds"),
-      "@build": path.resolve(__dirname, "./build"),
+      "@types": path.resolve(__dirname, "./types"),
+      "@renderer-types": path.resolve(__dirname, "./renderer/types"),
+      "@electron-types": path.resolve(__dirname, "./electron/types"),
+      "@electron": path.resolve(__dirname, "./electron"),
       "@root": path.resolve(__dirname, "."),
     },
   },
@@ -52,7 +52,7 @@ export default defineConfig({
     }),
   ],
   build: {
-    outDir: "dist-electron",
+    outDir: "dist",
     rollupOptions: {
       output: {
         format: "es",
@@ -61,6 +61,7 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    strictPort: true,
+    strictPort: false,
+    host: true,
   },
 });

@@ -27,6 +27,7 @@ A modern boilerplate for building Electron applications with React and Fluent UI
 │   ├── components/        # UI components
 │   │   ├── breadcrumb/    # Breadcrumb navigation
 │   │   ├── dialog/        # Modal dialog components
+│   │   ├── error/         # Error boundary components
 │   │   ├── footer/        # Footer component
 │   │   ├── navbar/        # Top navigation bar
 │   │   ├── report/        # Report components
@@ -34,31 +35,49 @@ A modern boilerplate for building Electron applications with React and Fluent UI
 │   ├── context/           # React Context providers
 │   │   ├── grid/          # Grid state management
 │   │   ├── location/      # Location state
-│   │   ├── tabs/          # Tab management
-│   │   └── theme/         # Theme management
+│   │   └── tabs/          # Tab management
 │   ├── hooks/             # Custom React hooks
 │   ├── layout/            # Layout components
 │   ├── pages/             # Page components
 │   │   ├── help/          # Help page
 │   │   └── home/          # Home page
 │   ├── routes/            # React Router configuration
-│   └── types/             # TypeScript type definitions
+│   └── types/             # React-specific TypeScript types
 ├── electron/              # Electron main process code
 │   ├── main.ts            # Main Electron process
 │   ├── preload.ts         # Preload script
-│   └── types/             # Electron type definitions
+│   └── types/             # Electron-specific types
+├── types/                 # Centralized TypeScript definitions
+│   ├── vite-env.d.ts      # Vite client types
+│   ├── electron-env.d.ts  # Electron & Node.js types
+│   └── index.d.ts         # Main type entry point
 ├── dist-electron/         # Compiled Electron files
 └── release/               # Packaged application output
 ```
 
 ## Available Bun Scripts
 
-- `bun start`: Start development server
-- `bun run build`: Build and package the application
-- `bun run lint`: Code analysis with Biome
+### Development
+- `bun start` / `bun dev`: Start development server
+- `bun run preview`: Preview the built application
+
+### Building
+- `bun run build`: Complete build pipeline (renderer → electron → package)
+- `bun run build:renderer`: Build React app only (`dist/`)
+- `bun run build:electron`: Compile Electron TypeScript (`dist-electron/`)
+- `bun run package`: Package with electron-builder (`release/`)
+
+### Code Quality
+- `bun run lint`: Code analysis with Biome (renderer + electron)
 - `bun run format`: Code formatting with Biome
 - `bun run check`: Comprehensive check with Biome
-- `bun run preview`: Preview the built application
+
+### Type Checking
+- `bun run type-check`: TypeScript check for renderer
+- `bun run type-check:electron`: TypeScript check for Electron
+
+### Utilities
+- `bun run clean`: Remove build artifacts (`dist`, `dist-electron`, `release`)
 
 ## Configuration Files
 
@@ -93,10 +112,10 @@ A modern boilerplate for building Electron applications with React and Fluent UI
 ## Features
 
 - **Modern UI**: Windows 11-style interface with FluentUI components
-- **Theme Management**: Automatic/manual theme switching via Electron nativeTheme API
+- **Error Handling**: Comprehensive error boundaries for stability
 - **TypeScript**: Full type safety
 - **Hot Reload**: Instant reloading during development
-- **Context API**: Global state management (Grid, Location, Tabs, Theme)
+- **Context API**: Global state management (Grid, Location, Tabs)
 - **Custom Hooks**: Reusable React hooks
 - **Responsive Layout**: Adaptive sidebar and navbar
 - **Routing**: Page navigation with React Router
@@ -105,9 +124,27 @@ A modern boilerplate for building Electron applications with React and Fluent UI
 ## Development Notes
 
 - FluentUI components are compatible with Microsoft's design system
-- Electron's `nativeTheme` API automatically detects system theme
+- Electron's `nativeTheme` API can be utilized for system theme detection
 - Very fast development experience thanks to Vite
 - Biome offers a much faster alternative to ESLint and Prettier
+- Error boundaries provide robust error handling in React components
+
+## Architecture Decisions
+
+### Styling Strategy
+- **Single SCSS file**: All styles in `renderer/styles.scss` for simplicity
+- **CSS Variables**: Theme-based color variables for light/dark modes
+- **FluentUI Integration**: Leverages FluentUI's design tokens
+
+### Context Hierarchy
+- **LocationProvider** (outermost): Router location context
+- **GridProvider** (middle): Grid state management  
+- **TabProvider** (innermost): Tab state, changes most frequently
+
+### Type Safety
+- **Centralized types**: Global types in `/types` directory
+- **Module types**: Component-specific types in respective `/types` folders
+- **Environment types**: Electron and Vite environment extensions
 
 ## Environment Variables
 

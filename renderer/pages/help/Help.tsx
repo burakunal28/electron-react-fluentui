@@ -8,13 +8,13 @@ import {
 } from "@fluentui/react-components";
 import { InfoRegular, PrintRegular } from "@fluentui/react-icons";
 import { useGridHeight } from "@hooks/useGridHeight";
-import { useLocation } from "@hooks/useLocation";
+import { useLocationContext } from "@hooks/useLocationContext";
 import { Layout } from "@layout/Layout";
 import type { HelpItem, HelpSection } from "@/types/pages/help";
 
 function Help() {
   useGridHeight();
-  const { title: pageTitle } = useLocation();
+  const { title: pageTitle } = useLocationContext();
 
   const handleExternalLink = async (url: string) => {
     try {
@@ -82,7 +82,9 @@ function Help() {
 
   const renderSectionMetaInfo = (section: HelpSection) => (
     <div className="help-meta-info">
-      <span className={`help-difficulty help-difficulty-${section.difficulty.toLowerCase()}`}>
+      <span
+        className={`help-difficulty help-difficulty-${section.difficulty.toLowerCase()}`}
+      >
         {section.difficulty.charAt(0).toUpperCase() +
           section.difficulty.slice(1)}
       </span>

@@ -1,10 +1,10 @@
 import { Button, Link } from "@fluentui/react-components";
 import { PrintRegular } from "@fluentui/react-icons";
-import { useLocation } from "@hooks/useLocation";
+import { useLocationContext } from "@hooks/useLocationContext";
 import { Layout } from "@layout/Layout";
 
 function Home() {
-  const { title: pageTitle } = useLocation();
+  const { title: pageTitle } = useLocationContext();
 
   const handlePrint = () => {
     const confirmPrint = window.confirm(
@@ -36,10 +36,10 @@ function Home() {
         <ol>
           <li>Clone the repository.</li>
           <li>
-            Run <code>npm install</code>.
+            Run <code>bun install</code>.
           </li>
           <li>
-            Start the server with <code>npm start</code>.
+            Start the server with <code>bun start</code>.
           </li>
         </ol>
 
@@ -50,13 +50,13 @@ function Home() {
             Build for your platform:
             <ul>
               <li>
-                Windows: <code>npm run build:win</code>
+                Complete build: <code>bun run build</code>
               </li>
               <li>
-                macOS: <code>npm run build:mac</code>
+                Renderer only: <code>bun run build:renderer</code>
               </li>
               <li>
-                Linux: <code>npm run build:linux</code>
+                Electron only: <code>bun run build:electron</code>
               </li>
             </ul>
           </li>
@@ -68,7 +68,7 @@ function Home() {
         <h2>Project Structure</h2>
         <ul>
           <li>
-            <code>src/</code>: Source code for the React app.
+            <code>renderer/</code>: React application source code.
           </li>
           <li>
             <code>electron/</code>: Electron main process code.

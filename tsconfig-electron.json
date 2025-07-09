@@ -9,5 +9,5 @@
     "moduleResolution": "node",
     "allowImportingTsExtensions": false
   },
-  "include": ["electron"]
+  "include": ["electron", "types"]
 }

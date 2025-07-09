@@ -4,13 +4,13 @@ import {
   NavItem,
   Text,
 } from "@fluentui/react-components";
-import { useLocation } from "@hooks/useLocation";
+import { useLocationContext } from "@hooks/useLocationContext";
 import { routes } from "@routes/routes";
 import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { pathname } = useLocationContext();
 
   const handleClick = (path: string) => {
     navigate(path);
@@ -58,9 +58,7 @@ const Sidebar = () => {
 
       <div className="sidebar-footer">
         <div className="developer-info">
-          <Text className="sidebar-text-small">
-            Developed by
-          </Text>
+          <Text className="sidebar-text-small">Developed by</Text>
           <button
             type="button"
             onClick={() => handleExternalLink("https://github.com/burakunal28")}

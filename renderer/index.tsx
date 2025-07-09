@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./styles.scss";
-import { ThemePreferenceContext } from "@context/theme/ThemePreferenceContext";
 import type { BrandVariants, Theme } from "@fluentui/react-components";
 import {
   createDarkTheme,
@@ -11,13 +10,19 @@ import {
 } from "@fluentui/react-components";
 
 // Use contextBridge
-if (window.ipcRenderer && typeof window.ipcRenderer.on === "function") {
-  window.ipcRenderer.on("main-process-message", (_event, message) => {
-    console.log(message);
-  });
+if (
+  window.electron?.ipcRenderer &&
+  typeof window.electron.ipcRenderer.on === "function"
+) {
+  window.electron.ipcRenderer.on(
+    "main-process-message",
+    (_event: unknown, message: unknown) => {
+      console.log(message);
+    },
+  );
 }
 
-const userTheme: BrandVariants = {
+const theme: BrandVariants = {
   10: "#031612",
   20: "#0A2926",
   30: "#0F3D39",
@@ -36,107 +41,62 @@ const userTheme: BrandVariants = {
   160: "#C3F9FF",
 };
 
-const adminTheme: BrandVariants = {
-  10: "#060200",
-  20: "#251200",
-  30: "#411900",
-  40: "#591C00",
-  50: "#731C00",
-  60: "#911400",
-  70: "#AE0004",
-  80: "#C60014",
-  90: "#DF0023",
-  100: "#F22136",
-  110: "#FF414E",
-  120: "#FF676C",
-  130: "#FF8387",
-  140: "#FF9CA0",
-  150: "#FFB3B8",
-  160: "#FFC9CE",
-};
-
-const userLightTheme: Theme = createLightTheme(userTheme);
-const userDarkTheme: Theme = createDarkTheme(userTheme);
-const adminLightTheme: Theme = createLightTheme(adminTheme);
-const adminDarkTheme: Theme = createDarkTheme(adminTheme);
+const lightTheme: Theme = createLightTheme(theme);
+const darkTheme: Theme = createDarkTheme(theme);
 
 const forcedBorderRadius = "4px";
 
-userLightTheme.borderRadiusNone = forcedBorderRadius;
-userLightTheme.borderRadiusSmall = forcedBorderRadius;
-userLightTheme.borderRadiusMedium = forcedBorderRadius;
-userLightTheme.borderRadiusLarge = forcedBorderRadius;
-userLightTheme.borderRadiusXLarge = forcedBorderRadius;
-userLightTheme.borderRadiusCircular = forcedBorderRadius;
+lightTheme.borderRadiusNone = forcedBorderRadius;
+lightTheme.borderRadiusSmall = forcedBorderRadius;
+lightTheme.borderRadiusMedium = forcedBorderRadius;
+lightTheme.borderRadiusLarge = forcedBorderRadius;
+lightTheme.borderRadiusXLarge = forcedBorderRadius;
+lightTheme.borderRadiusCircular = forcedBorderRadius;
 
-userDarkTheme.borderRadiusNone = forcedBorderRadius;
-userDarkTheme.borderRadiusSmall = forcedBorderRadius;
-userDarkTheme.borderRadiusMedium = forcedBorderRadius;
-userDarkTheme.borderRadiusLarge = forcedBorderRadius;
-userDarkTheme.borderRadiusXLarge = forcedBorderRadius;
-userDarkTheme.borderRadiusCircular = forcedBorderRadius;
+darkTheme.borderRadiusNone = forcedBorderRadius;
+darkTheme.borderRadiusSmall = forcedBorderRadius;
+darkTheme.borderRadiusMedium = forcedBorderRadius;
+darkTheme.borderRadiusLarge = forcedBorderRadius;
+darkTheme.borderRadiusXLarge = forcedBorderRadius;
+darkTheme.borderRadiusCircular = forcedBorderRadius;
 
-adminLightTheme.borderRadiusNone = forcedBorderRadius;
-adminLightTheme.borderRadiusSmall = forcedBorderRadius;
-adminLightTheme.borderRadiusMedium = forcedBorderRadius;
-adminLightTheme.borderRadiusLarge = forcedBorderRadius;
-adminLightTheme.borderRadiusXLarge = forcedBorderRadius;
-adminLightTheme.borderRadiusCircular = forcedBorderRadius;
+lightTheme.colorBrandForeground1 = theme[110];
+lightTheme.colorBrandForeground2 = theme[120];
 
-adminDarkTheme.borderRadiusNone = forcedBorderRadius;
-adminDarkTheme.borderRadiusSmall = forcedBorderRadius;
-adminDarkTheme.borderRadiusMedium = forcedBorderRadius;
-adminDarkTheme.borderRadiusLarge = forcedBorderRadius;
-adminDarkTheme.borderRadiusXLarge = forcedBorderRadius;
-adminDarkTheme.borderRadiusCircular = forcedBorderRadius;
-
-userLightTheme.colorBrandForeground1 = userTheme[110];
-userLightTheme.colorBrandForeground2 = userTheme[120];
-
-adminDarkTheme.colorBrandForeground1 = adminTheme[110];
-adminDarkTheme.colorBrandForeground2 = adminTheme[120];
+darkTheme.colorBrandForeground1 = theme[110];
+darkTheme.colorBrandForeground2 = theme[120];
 
 const getSystemTheme = (): Theme => {
   const isDarkMode = window.matchMedia?.(
     "(prefers-color-scheme: dark)",
   ).matches;
-  return isDarkMode ? userDarkTheme : userLightTheme;
+  return isDarkMode ? darkTheme : lightTheme;
+};
+
+const getSystemThemePreference = (): "light" | "dark" => {
+  const isDarkMode = window.matchMedia?.(
+    "(prefers-color-scheme: dark)",
+  ).matches;
+  return isDarkMode ? "dark" : "light";
 };
 
 export function Main() {
-  const [themePreference, setThemePreference] = useState("system");
+  const [themePreference] = useState<"light" | "dark">(getSystemThemePreference());
   const [currentTheme, setCurrentTheme] = useState(getSystemTheme());
-
-  const contextValue = useMemo(
-    () => ({
-      themePreference,
-      setThemePreference,
-    }),
-    [themePreference],
-  );
 
   const setTheme = useCallback((theme: Theme) => {
     const bodyClassList = document.body.classList;
-    bodyClassList.remove(
-      "user-light",
-      "user-dark",
-      "admin-light",
-      "admin-dark",
-    );
+    bodyClassList.remove("light", "dark");
 
-    let themeName = "system"; // Default
-    if (theme === userLightTheme) {
-      bodyClassList.add("user-light");
-      themeName = "user-light";
-    } else if (theme === userDarkTheme) {
-      bodyClassList.add("user-dark");
-      themeName = "user-dark";
-    } else if (theme === adminLightTheme) {
-      bodyClassList.add("admin-light");
-      themeName = "admin-light";
-    } else if (theme === adminDarkTheme) {
-      bodyClassList.add("admin-dark");
-      themeName = "admin-dark";
+    let themeName: string;
+    if (theme === lightTheme) {
+      bodyClassList.add("light");
+      themeName = "light";
+    } else if (theme === darkTheme) {
+      bodyClassList.add("dark");
+      themeName = "dark";
+    } else {
+      themeName = "light";
     }
 
     document.documentElement.setAttribute("data-theme", themeName);
@@ -144,63 +104,39 @@ export function Main() {
   }, []);
 
   useEffect(() => {
-    let mq: MediaQueryList | undefined;
-    let handleChange: ((e: MediaQueryListEvent) => void) | undefined;
+    // Listen for system theme changes
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleThemeChange = (e: MediaQueryListEvent) => {
+      const newTheme = e.matches ? darkTheme : lightTheme;
+      setTheme(newTheme);
+    };
 
-    // Update theme based on selected theme preference
+    mediaQuery.addEventListener("change", handleThemeChange);
+
+    // Set initial theme based on preference
     switch (themePreference) {
-      case "user-light":
-        setTheme(userLightTheme);
+      case "light":
+        setTheme(lightTheme);
         break;
-      case "user-dark":
-        setTheme(userDarkTheme);
+      case "dark":
+        setTheme(darkTheme);
         break;
-      case "admin-light":
-        setTheme(adminLightTheme);
-        break;
-      case "admin-dark":
-        setTheme(adminDarkTheme);
-        break;
-      default: {
-        // Get and apply system theme
-        const systemTheme = getSystemTheme();
-        setTheme(systemTheme);
-
-        // Set up system theme listener
-        mq = window.matchMedia("(prefers-color-scheme: dark)");
-        handleChange = (e: MediaQueryListEvent) => {
-          // Only update when 'system' is selected
-          if (themePreference === "system") {
-            setTheme(e.matches ? userDarkTheme : userLightTheme);
-          }
-        };
-
-        mq.addEventListener("change", handleChange);
-        break;
-      }
     }
 
-    // Cleanup function: runs when component unmounts or themePreference changes
     return () => {
-      if (mq && handleChange) {
-        mq.removeEventListener("change", handleChange);
-      }
+      mediaQuery.removeEventListener("change", handleThemeChange);
     };
   }, [themePreference, setTheme]);
 
   return (
     <FluentProvider theme={currentTheme}>
-      <ThemePreferenceContext.Provider value={contextValue}>
-        <div
-          className={
-            currentTheme === userDarkTheme || currentTheme === adminDarkTheme
-              ? "app-root-dark"
-              : "app-root-light"
-          }
-        >
-          <App />
-        </div>
-      </ThemePreferenceContext.Provider>
+      <div
+        className={
+          currentTheme === darkTheme ? "app-root-dark" : "app-root-light"
+        }
+      >
+        <App />
+      </div>
     </FluentProvider>
   );
 }

@@ -8,7 +8,7 @@ import {
 } from "@fluentui/react-components";
 import { Home16Filled, Home16Regular } from "@fluentui/react-icons";
 import { useHover } from "@hooks/useHover";
-import { useLocation } from "@hooks/useLocation";
+import { useLocationContext } from "@hooks/useLocationContext";
 import { routes } from "@routes/routes";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ import type { BreadcrumbItemType } from "@/types/components/breadcrumb";
 export const Breadcrumb: React.FC = () => {
   const navigate = useNavigate();
   const { isHovered, hoverProps } = useHover("footer-home");
-  const { pathname, title } = useLocation() as {
+  const { pathname, title } = useLocationContext() as {
     pathname: string;
     title: string;
   };

@@ -1,5 +1,5 @@
-import * as fs from "node:fs";
 import * as path from "node:path";
+import { config } from "dotenv";
 import {
   app,
   BrowserWindow,
@@ -9,25 +9,8 @@ import {
   shell,
 } from "electron";
 
-// Simple .env file loader (without requiring dotenv dependency)
-const loadEnvFile = () => {
-  const envPath = path.join(__dirname, "../.env");
-  if (fs.existsSync(envPath)) {
-    const envContent = fs.readFileSync(envPath, "utf8");
-    envContent.split("\n").forEach((line) => {
-      const trimmedLine = line.trim();
-      if (trimmedLine && !trimmedLine.startsWith("#")) {
-        const [key, value] = trimmedLine.split("=");
-        if (key && value && !process.env[key]) {
-          process.env[key] = value;
-        }
-      }
-    });
-  }
-};
-
 // Load environment variables from .env file
-loadEnvFile();
+config({ path: path.join(__dirname, "../.env") });
 
 // IPC Channel definitions for type safety
 enum IPCChannels {
@@ -44,7 +27,7 @@ enum IPCChannels {
 }
 
 // System error types
-interface SystemError {
+export interface SystemError {
   type:
     | "uncaughtException"
     | "unhandledRejection"
@@ -114,8 +97,17 @@ app.whenReady().then(() => {
 
   // Helper function for sending system errors to renderer
   const sendSystemError = (error: SystemError) => {
-    if (win && !win.isDestroyed()) {
-      win.webContents.send(IPCChannels.SYSTEM_ERROR, error);
+    try {
+      if (
+        win &&
+        !win.isDestroyed() &&
+        win.webContents &&
+        !win.webContents.isDestroyed()
+      ) {
+        win.webContents.send(IPCChannels.SYSTEM_ERROR, error);
+      }
+    } catch (sendError) {
+      log.error("Failed to send system error to renderer:", sendError);
     }
   };
 
@@ -255,7 +247,6 @@ function createWindow() {
   const minHeight = Math.round(height * 0.8);
 
   win = new BrowserWindow({
-    icon: path.join(__dirname, "../renderer/assets/images/icon.png"),
     titleBarStyle: "hidden",
     minWidth: minWidth,
     minHeight: minHeight,
@@ -291,20 +282,22 @@ function createWindow() {
     log.info("Production mode: DevTools disabled");
   }
 
-  // Performans izleme
-  const startTime = process.hrtime.bigint();
-  win.webContents.on("did-finish-load", () => {
-    const endTime = process.hrtime.bigint();
-    const loadTime = Number(endTime - startTime) / 1000000; // ms cinsinden
-    log.info(`Window loaded in ${loadTime.toFixed(2)}ms`);
+  // Performance monitoring - Only in development
+  if (ENABLE_DEVTOOLS) {
+    const startTime = process.hrtime.bigint();
+    win.webContents.on("did-finish-load", () => {
+      const endTime = process.hrtime.bigint();
+      const loadTime = Number(endTime - startTime) / 1000000; // ms cinsinden
+      log.info(`Window loaded in ${loadTime.toFixed(2)}ms`);
 
-    // CPU kullanımını izle
-    const cpuUsage = process.cpuUsage();
-    log.info("CPU usage:", {
-      user: cpuUsage.user,
-      system: cpuUsage.system,
+      // CPU kullanımını izle
+      const cpuUsage = process.cpuUsage();
+      log.info("CPU usage:", {
+        user: cpuUsage.user,
+        system: cpuUsage.system,
+      });
     });
-  });
+  }
 
   // Type-safe window event handlers
   win.on("maximize", () => {

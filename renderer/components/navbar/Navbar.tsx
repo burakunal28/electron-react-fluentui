@@ -5,26 +5,28 @@ import {
   SubtractRegular,
   TabsRegular,
 } from "@fluentui/react-icons";
+import type { FC } from "react";
 import { useState } from "react";
+import type { NavbarProps } from "@/types/components/navbar";
 
-const Navbar = () => {
+const Navbar: FC<NavbarProps> = ({ className }) => {
   const [isMaximized, setIsMaximized] = useState(false);
 
   const handleMinimize = () => {
-    window.electron.ipcRenderer.invoke("minimize-window");
+    window.electron?.ipcRenderer.invoke("minimize-window");
   };
 
   const handleMaximize = () => {
-    window.electron.toggleMaximizeWindow();
+    window.electron?.toggleMaximizeWindow();
     setIsMaximized(!isMaximized);
   };
 
   const handleClose = () => {
-    window.electron.quitApp();
+    window.electron?.quitApp();
   };
 
   return (
-    <div className="navbar">
+    <div className={`navbar ${className}`}>
       <div className="navbar-logo-container">
         <Subtitle2 className="navbar-logo-text">
           Electron-React-FluentUI Boilerplate

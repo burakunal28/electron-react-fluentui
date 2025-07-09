@@ -46,12 +46,6 @@ $status-success-border-dark: #05402E;
 $status-warning-border-dark: #B09D4C;
 $status-danger-border-dark: #B91C1C;
 
-// Admin Mode Brand Colors
-$admin-text-light: #C60014;
-$admin-scrollbar-hover-light: #AE0004;
-$admin-text-dark: #F22136;
-$admin-scrollbar-hover-dark: #D01527; 
-
 // Nav Close Button Color
 $nav-close-button-bg: #C42B1C;
 $nav-close-button-text: #FFFFFF;
@@ -100,7 +94,7 @@ $shape-warning-glow-dark: #BBBBBB;
 }
 
 // Temel Stiller
-body.user-light {
+body.light {
   --root-bg: #{$root-bg-light};
   --content-bg: #{$content-bg-light};
   --text: #{$text-light};
@@ -137,7 +131,7 @@ body.user-light {
   --shape-warning-active-stroke: var(--shape-blue-color);
 }
 
-body.user-dark {
+body.dark {
   --root-bg: #{$root-bg-dark};
   --content-bg: #{$content-bg-dark};
   --text: #{$text-dark};
@@ -170,76 +164,6 @@ body.user-dark {
   --shape-warning-inactive-stroke: #{$shape-warning-inactive-stroke-dark};
   --shape-warning-active: var(--shape-blue-bg);
   --shape-warning-active-stroke: var(--shape-blue-color);
-}
-
-body.admin-light {
-  --root-bg: #{$root-bg-light};
-  --content-bg: #{$content-bg-light};
-  --text: #{$admin-text-light};
-  --border: #{$border-light};
-  --scrollbar-hover: #{$admin-scrollbar-hover-light};
-  --content-box-bg: #{$content-box-bg-light};
-  --sidebar-bg: #{$sidebar-bg-light};
-  --sidebar-selected-bg: #{$sidebar-selected-bg-light};
-  --navbar-button-bg: #{$navbar-button-bg-light};
-  --navbar-button-text: #{$navbar-button-text-light};
-  --nav-close-button-bg: #{$nav-close-button-bg};
-  --nav-close-button-text: #{$nav-close-button-text};
-  --dialog-bg: #{$dialog-bg-light};
-  --dialog-body-bg: #{$dialog-body-bg-light};
-  --dialog-footer-bg: #{$dialog-footer-bg-light};
-  --status-success-bg: #{$status-success-bg-light};
-  --status-success-text: #{$status-success-text-light};
-  --status-warning-bg: #{$status-warning-bg-light};
-  --status-warning-text: #{$status-warning-text-light};
-  --status-danger-bg: #{$status-danger-bg-light};
-  --status-danger-text: #{$status-danger-text-light};
-  --status-success-border: #{$status-success-border-light};
-  --status-warning-border: #{$status-warning-border-light};
-  --status-danger-border: #{$status-danger-border-light};
-  --shape-blue-bg: #{$shape-blue-bg-light};
-  --shape-blue-color: #{$shape-blue-color-light};
-  --shape-red-bg: #{$shape-red-bg-light};
-  --shape-red-color: #{$shape-red-color-light};
-  --shape-warning-inactive: #{$shape-warning-inactive-light};
-  --shape-warning-inactive-stroke: #{$shape-warning-inactive-stroke-light};
-  --shape-warning-active: var(--shape-red-bg);
-  --shape-warning-active-stroke: var(--shape-red-color);
-}
-
-body.admin-dark {
-  --root-bg: #{$root-bg-dark};
-  --content-bg: #{$content-bg-dark};
-  --text: #{$admin-text-dark};
-  --border: #{$border-dark};
-  --scrollbar-hover: #{$admin-scrollbar-hover-dark};
-  --content-box-bg: #{$content-box-bg-dark};
-  --sidebar-bg: #{$sidebar-bg-dark};
-  --sidebar-selected-bg: #{$sidebar-selected-bg-dark};
-  --navbar-button-bg: #{$navbar-button-bg-dark};
-  --navbar-button-text: #{$navbar-button-text-dark};
-  --nav-close-button-bg: #{$nav-close-button-bg};
-  --nav-close-button-text: #{$nav-close-button-text};
-  --dialog-bg: #{$dialog-bg-dark};
-  --dialog-body-bg: #{$dialog-body-bg-dark};
-  --dialog-footer-bg: #{$dialog-footer-bg-dark};
-  --status-success-bg: #{$status-success-bg-dark};
-  --status-success-text: #{$status-success-text-dark};
-  --status-warning-bg: #{$status-warning-bg-dark};
-  --status-warning-text: #{$status-warning-text-dark};
-  --status-danger-bg: #{$status-danger-bg-dark};
-  --status-danger-text: #{$status-danger-text-dark};
-  --status-success-border: #{$status-success-border-dark};
-  --status-warning-border: #{$status-warning-border-dark};
-  --status-danger-border: #{$status-danger-border-dark};
-  --shape-blue-bg: #{$shape-blue-bg-dark};
-  --shape-blue-color: #{$shape-blue-color-dark};
-  --shape-red-bg: #{$shape-red-bg-dark};
-  --shape-red-color: #{$shape-red-color-dark};
-  --shape-warning-inactive: #{$shape-warning-inactive-dark};
-  --shape-warning-inactive-stroke: #{$shape-warning-inactive-stroke-dark};
-  --shape-warning-active: var(--shape-red-bg);
-  --shape-warning-active-stroke: var(--shape-red-color);
 }
 
 html, body {
@@ -920,6 +844,53 @@ html, body {
             line-height: inherit !important;
         }
     }
+}
+
+// Error Boundary Styles
+.error-boundary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+
+  .error-boundary-content {
+    text-align: center;
+    max-width: 500px;
+    
+    .error-icon {
+      font-size: 4rem;
+      color: var(--status-danger-text);
+      margin-bottom: 1rem;
+    }
+    
+    .error-details {
+      margin: 1rem 0;
+      text-align: left;
+      
+      summary {
+        cursor: pointer;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+      
+      pre {
+        background: var(--content-box-bg);
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        font-size: 0.8rem;
+        white-space: pre-wrap;
+      }
+    }
+    
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+  }
 }
 
 /* Custom DataGrid */
